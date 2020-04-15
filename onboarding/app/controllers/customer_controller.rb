@@ -7,14 +7,14 @@ class CustomerController < ApplicationController
 
   def create
 R   @customer = Customer.new(customer_params)
-    @customer.save
+R   @customer.save
     redirect_to @customer
   end
 
   def find_all
   R  @customers = Customer.all
-    respond_to do |format|
-      format.html # index.html.erb
+ R  respond_to do |format|
+  R   format.html # index.html.erb
       format.json { render json: @customers }
     end
   end
@@ -28,7 +28,7 @@ R   @customer = Customer.new(customer_params)
     end
   end
 
-  def customer_params
+  private def customer_params
     params.required(:customer).permit(:name, :document, :active)
   end
 end
