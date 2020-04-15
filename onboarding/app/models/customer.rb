@@ -1,14 +1,14 @@
 class Customer < ApplicationRecord
-	has_many :tours
-	validates :document, presence: true,
+  has_and_belongs_to_many :tours
+  validates :document, presence: true,
 		length: { minimum: 7 }
 
-  def find_tours_by_customer
-    Customer.joins("RIGHT JOIN customers_tours ON customers.id = customers_tours.customers_id")
+  def self.find_tours_by_customer
+    joins("RIGHT JOIN customers_tours ON customers.id = customers_tours.customers_id")
   end
   def format_name
-    #self[:name].upcase
-R   @name = Customer.select(:name)
-    @name.upcase
+    name.upcase
+   #@name = Customer.select(:name)
+   #@name.upcase
   end
 end
