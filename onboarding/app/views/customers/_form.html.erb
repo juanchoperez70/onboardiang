@@ -1,0 +1,13 @@
+<%= form_with model: @customer, local: true do |form| %>
+  <p>
+    <%= form.label :name %>
+    <%= form.text_area :name %>
+  </p>
+  <p>
+    <%= form.label :document %>
+    <%= form.text_area :document %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
