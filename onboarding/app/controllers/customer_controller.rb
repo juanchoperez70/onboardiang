@@ -1,21 +1,24 @@
 class CustomerController < ApplicationController
   before_action :require_active_customer, only:[:find_all]
+  def index
+    @customers = Customer.all
+  end
 
   def show
     @customer = Customer.find(params[:id])
   end
 
   def create
-R   @customer = Customer.new(customer_params)
-R   @customer.save
+   @customer = Customer.new(customer_params)
+   @customer.save
     redirect_to @customer
   end
 
   def find_all
-  R  @customers = Customer.all
- R  respond_to do |format|
-  R   format.html # index.html.erb
-      format.json { render json: @customers }
+   @customers = Customer.all
+   respond_to do |format|
+     format.html # index.html.erb
+     format.json { render json: @customers }
     end
   end
 

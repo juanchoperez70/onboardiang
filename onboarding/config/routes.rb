@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   #post '/customer/create' => 'customer#create', as: :create_customer
   #get '/customer/find_all' => 'customer#find_all', as: :find_all
   resources :customers do
-    get 'find_all'
+    collection do
+      post 'find_all'
+    end
   end
+  #resources :find_all, controller: 'customers'
 end
