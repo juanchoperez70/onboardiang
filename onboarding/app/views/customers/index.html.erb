@@ -1,0 +1,15 @@
+<%= stylesheet_link_tag "main" %>
+<h1>Customers</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Document</th>
+  </tr>
+  <% @custmers.each do |customer| %>
+    <tr>
+      <td><%= customer.name %></td>
+      <td><%= customer.document %></td>
+    </tr>
+  <% end %>
+</table>
+<%= javascript_include_tag "my_script" %>
