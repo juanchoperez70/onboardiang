@@ -1,5 +1,5 @@
 class CustomerController < ApplicationController
-  before_action :require_active_customer, only:[:find_all]
+  before_action :require_active_customer, only:[:show]
   def index
     @customers = Customer.all
   end
@@ -15,14 +15,15 @@ class CustomerController < ApplicationController
   end
 
   def find_all
-   @customers = Customer.all
-   respond_to do |format|
-     format.html # index.html.erb
-     format.json { render json: @customers }
+    #byebug
+    @customers = Customer.all
+    respond_to do |format|
+      format.html { redirect_to 'customers_path' }
+      format.json { render json: @customers }
     end
   end
 
-  private def active_customer
+  private def require_active_customer
     #check if customer is activo
     @customer = Customer.find(params[:id])
 	  unless  @customer.active?
