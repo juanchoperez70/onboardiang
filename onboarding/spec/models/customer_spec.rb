@@ -4,7 +4,7 @@ describe Customer do
 
   describe '#format_name' do
     it 'change name to uper case' do
-      customer.name = "andrea"
+      customer.name = 'andrea'
       expect(customer.format_name).to eql 'ANDREA'
    end
   end
@@ -25,23 +25,23 @@ describe Customer do
   end
 
   describe '#parse_from_json' do
-    it 'converts the dynamoDB response to json' do
-       allow(Aws::DynamoDB).to receive(:query).and_return('{"saludo":"hola mundo"}')
+    let(:expected_results) { {saludo:'hola mundo'}}
 
-       expect(customer.parse_from_json).to eq '...'
+    it 'converts the dynamoDB response to json' do
+       allow(Aws::DynamoDB).to receive(:query).and_return(expected_results)
+       expect(customer.parse_from_json).to eq(expected_results.to_json)
     end
 
     it 'only makes dynamoDB queries when customer id is even' do
       customer.id = 2
-      allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return('{"saludo":"hola mundo"}')
-      expect(customer.parse_from_json).to eq'...'
+      allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(expected_results)
+      expect(customer.parse_from_json).to eq(expected_results.to_json)
     end
 
     it 'does not make dynamoDB queries when customer id is odd' do
       customer.id = 3
-      allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return('{"saludo":"hola mundo"}')
-     # expect(customer.parse_from_json).not_to eq '...'
-      customer.parse_from_json
+      allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(nil)
+      expect(customer.parse_from_json).not_to eq(expected_results.to_json)
       expect(Aws::DynamoDB).to have_received(:query)
     end
   end
