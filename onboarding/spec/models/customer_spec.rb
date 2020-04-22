@@ -29,20 +29,20 @@ describe Customer do
 
     it 'converts the dynamoDB response to json' do
        allow(Aws::DynamoDB).to receive(:query).and_return(expected_results)
-       expect(customer.parse_from_json).to eq(expected_results.to_json)
+       expect(customer.parse_from_json(2)).to eq(expected_results.to_json)
     end
 
     it 'only makes dynamoDB queries when customer id is even' do
       customer.id = 2
       allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(expected_results)
-      expect(customer.parse_from_json).to eq(expected_results.to_json)
+      expect(customer.parse_from_json(customer.id)).to eq(expected_results.to_json)
     end
 
     it 'does not make dynamoDB queries when customer id is odd' do
       customer.id = 3
       allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(nil)
-      expect(customer.parse_from_json).not_to eq(expected_results.to_json)
-      expect(Aws::DynamoDB).to have_received(:query)
+      expect(customer.parse_from_json(customer.id)).not_to eq(expected_results.to_json)
+      expect(Aws::DynamoDB).not_to have_received(:query)
     end
   end
 end
