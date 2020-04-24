@@ -13,9 +13,11 @@ class Customer < ApplicationRecord
    #@name.upcase
   end
 
-  def parse_from_json(id)
-    if id.even?
+  def parse_from_json
+    query = if id.even?
       Aws::DynamoDB.query(id).to_json
     end
+    puts query
+    query
   end
 end

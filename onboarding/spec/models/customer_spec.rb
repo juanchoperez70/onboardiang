@@ -1,6 +1,6 @@
 require 'rails_helper'
 describe Customer do
-  let(:customer) { Customer.new }
+  let(:customer) { Customer.new}
 
   describe '#format_name' do
     it 'change name to uper case' do
@@ -28,21 +28,23 @@ describe Customer do
     let(:expected_results) { {saludo:'hola mundo'}}
 
     it 'converts the dynamoDB response to json' do
-       allow(Aws::DynamoDB).to receive(:query).and_return(expected_results)
-       expect(customer.parse_from_json(2)).to eq(expected_results.to_json)
+       customer.id=0
+       allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(expected_results)
+       expect(customer.parse_from_json).to eq(expected_results.to_json)
     end
 
     it 'only makes dynamoDB queries when customer id is even' do
       customer.id = 2
       allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(expected_results)
-      expect(customer.parse_from_json(customer.id)).to eq(expected_results.to_json)
+      customer.parse_from_json
+      expect(Aws::DynamoDB).to have_received(:query).with(customer.id)
     end
 
     it 'does not make dynamoDB queries when customer id is odd' do
       customer.id = 3
-      allow(Aws::DynamoDB).to receive(:query).with(customer.id).and_return(nil)
-      expect(customer.parse_from_json(customer.id)).not_to eq(expected_results.to_json)
-      expect(Aws::DynamoDB).not_to have_received(:query)
+      allow(Aws::DynamoDB).to receive(:query).with(customer.id)
+      customer.parse_from_json
+      expect(Aws::DynamoDB).not_to have_received(:query).with(customer.id)
     end
   end
 end
